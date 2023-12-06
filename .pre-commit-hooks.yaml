@@ -1,6 +1,6 @@
 - id: ao-conventional-pre-commit
   name: AO Conventional Commit
-  entry: conventional-pre-commit
+  entry: ao-conventional-pre-commit
   language: python
   description: Checks commit message for AO Conventional Commits formatting
   always_run: true

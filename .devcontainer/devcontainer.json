@@ -1,8 +1,12 @@
 {
-  "name": "compilerla/conventional-pre-commit",
-  "dockerComposeFile": ["./compose.yml"],
+  "name": "anderson-optimization/ao-conventional-pre-commit",
+  "dockerComposeFile": [
+    "./compose.yml"
+  ],
   "service": "dev",
-  "runServices": ["dev"],
+  "runServices": [
+    "dev"
+  ],
   "workspaceFolder": "/home/compiler/src",
   "postCreateCommand": "pip install -e .[dev]",
   "customizations": {

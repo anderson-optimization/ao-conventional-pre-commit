@@ -16,7 +16,7 @@ class Colors:
 
 def main(argv=[]):
     parser = argparse.ArgumentParser(
-        prog="conventional-pre-commit",
+        prog="ao-conventional-pre-commit",
         description="Check a git commit message for AO-compliant Conventional Commits formatting.",
     )
     parser.add_argument("types", type=str, nargs="*", default=format.DEFAULT_TYPES, help="Optional list of types to support")
