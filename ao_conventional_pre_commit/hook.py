@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-from conventional_pre_commit import format
+from ao_conventional_pre_commit import format
 
 RESULT_SUCCESS = 0
 RESULT_FAIL = 1

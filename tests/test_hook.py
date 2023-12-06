@@ -2,12 +2,12 @@ import subprocess
 
 import pytest
 
-from conventional_pre_commit.hook import RESULT_FAIL, RESULT_SUCCESS, main
+from ao_conventional_pre_commit.hook import RESULT_FAIL, RESULT_SUCCESS, main
 
 
 @pytest.fixture
 def cmd():
-    return "conventional-pre-commit"
+    return "ao-conventional-pre-commit"
 
 
 def test_main_fail__missing_args():

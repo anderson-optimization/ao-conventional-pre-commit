@@ -2,7 +2,7 @@ import re
 
 import pytest
 
-from conventional_pre_commit import format
+from ao_conventional_pre_commit import format
 
 CUSTOM_TYPES = ["one", "two"]
 

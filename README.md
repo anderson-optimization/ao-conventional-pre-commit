@@ -113,7 +113,7 @@ conventional-pre-commit feat fix chore ci test .git/COMMIT_MSG
 Or from a Python program:
 
 ```python
-from conventional_pre_commit.format import is_conventional
+from ao_conventional_pre_commit.format import is_conventional
 
 # prints True
 print(is_conventional("feat: DTCT-99: this is a conventional commit"))

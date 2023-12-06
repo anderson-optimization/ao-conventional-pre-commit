@@ -46,8 +46,8 @@ repos:
 
   - repo: local
     hooks:
-      - id: conventional-pre-commit
-        name: Conventional Commit (local)
-        entry: conventional-pre-commit
+      - id: ao-conventional-pre-commit
+        name: AO Conventional Commit (local)
+        entry: ao-conventional-pre-commit
         language: python
         stages: [commit-msg]
