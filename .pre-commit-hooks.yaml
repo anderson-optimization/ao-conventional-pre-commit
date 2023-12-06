@@ -2,6 +2,13 @@
   name: AO Conventional Commit
   entry: ao-conventional-pre-commit
   language: python
-  description: Checks commit message for AO Conventional Commits formatting
+  description: Checks commit message for AO Conventional Commit Formatting
   always_run: true
   stages: [commit-msg]
+- id: ao-conventional-merge-commit
+  name: AO Conventional Merge Commit
+  entry: ao-conventional-pre-commit
+  language: python
+  description: Checks merge commit for AO Conventional Commit Formatting
+  always_run: true
+  stages: [pre-merge-commit]
