@@ -94,6 +94,30 @@ def test_main_fail__conventional_commit_bad_multi_line(conventional_commit_bad_m
     assert result == RESULT_FAIL
 
 
+def test_main_fail__conventional_commit_no_ticket(conventional_commit_bad_missing_ticket_path):
+    result = main([conventional_commit_bad_missing_ticket_path])
+
+    assert result == RESULT_FAIL
+
+
+def test_main_success__conventional_commit_no_ticket(conventional_commit_bad_missing_ticket_path):
+    result = main(["--optional-ticket", conventional_commit_bad_missing_ticket_path])
+
+    assert result == RESULT_SUCCESS
+
+
+def test_main_success__conventional_commit_optional_colon(conventional_commit_optional_colon_path):
+    result = main([conventional_commit_optional_colon_path])
+
+    assert result == RESULT_SUCCESS
+
+
+def test_main_fail__conventional_commit_optional_colon_force_colon(conventional_commit_optional_colon_path):
+    result = main(["--force-colon-after-ticket", conventional_commit_optional_colon_path])
+
+    assert result == RESULT_FAIL
+
+
 def test_subprocess_fail__missing_args(cmd):
     result = subprocess.call(cmd)
 
@@ -162,5 +186,29 @@ def test_subprocess_success__conventional_commit_multi_line(cmd, conventional_co
 
 def test_subprocess_fail__conventional_commit_bad_multi_line(cmd, conventional_commit_bad_multi_line_path):
     result = subprocess.call((cmd, conventional_commit_bad_multi_line_path))
+
+    assert result == RESULT_FAIL
+
+
+def test_subprocess_fail__conventional_commit_no_ticket(cmd, conventional_commit_bad_missing_ticket_path):
+    result = subprocess.call((cmd, conventional_commit_bad_missing_ticket_path))
+
+    assert result == RESULT_FAIL
+
+
+def test_subprocess_success__conventional_commit_no_ticket(cmd, conventional_commit_bad_missing_ticket_path):
+    result = subprocess.call((cmd, "--optional-ticket", conventional_commit_bad_missing_ticket_path))
+
+    assert result == RESULT_SUCCESS
+
+
+def test_subprocess_success__conventional_commit_optional_colon(cmd, conventional_commit_optional_colon_path):
+    result = subprocess.call((cmd, conventional_commit_optional_colon_path))
+
+    assert result == RESULT_SUCCESS
+
+
+def test_subprocess_fail__conventional_commit_optional_colon_force_colon(cmd, conventional_commit_optional_colon_path):
+    result = subprocess.call((cmd, "--force-colon-after-ticket", conventional_commit_optional_colon_path))
 
     assert result == RESULT_FAIL

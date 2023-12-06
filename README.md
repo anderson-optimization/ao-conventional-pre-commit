@@ -1,7 +1,9 @@
 # conventional-pre-commit
 
 A [`pre-commit`](https://pre-commit.com) hook to check commit messages for
-[Conventional Commits](https://conventionalcommits.org) formatting.
+[Conventional Commits](https://conventionalcommits.org) formatting, customized for Anderson Optimization format to include JIRA ticket numbers.
+
+[See the GitBook for more details](https://app.gitbook.com/o/-MPk29w3J35c1gpH27R3/s/-MTfg11Sa9v8-geD90cu/process/overview-2#4.-commit-messages).
 
 Works with Python >= 3.8.
 
@@ -19,14 +21,14 @@ Add a new repo entry to your configuration file:
 
 ```yaml
 repos:
-  # - repo: ...
+    # - repo: ...
 
-  - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: <git sha or tag>
-    hooks:
-      - id: conventional-pre-commit
-        stages: [commit-msg]
-        args: []
+    - repo: https://github.com/compilerla/conventional-pre-commit
+      rev: <git sha or tag>
+      hooks:
+          - id: conventional-pre-commit
+            stages: [commit-msg]
+            args: []
 ```
 
 Install the `pre-commit` script:
@@ -100,9 +102,9 @@ Then run the command line script:
 conventional-pre-commit [types] input
 ```
 
-- `[types]` is an optional list of Conventional Commit types to allow (e.g. `feat fix chore`)
+-   `[types]` is an optional list of Conventional Commit types to allow (e.g. `feat fix chore`)
 
-- `input` is a file containing the commit message to check:
+-   `input` is a file containing the commit message to check:
 
 ```shell
 conventional-pre-commit feat fix chore ci test .git/COMMIT_MSG
@@ -114,13 +116,19 @@ Or from a Python program:
 from conventional_pre_commit.format import is_conventional
 
 # prints True
-print(is_conventional("feat: this is a conventional commit"))
+print(is_conventional("feat: DTCT-99: this is a conventional commit"))
 
 # prints False
-print(is_conventional("nope: this is not a conventional commit"))
+print(is_conventional("nope: DTCT-99: this is not a conventional commit"))
 
 # prints True
-print(is_conventional("custom: this is a conventional commit", types=["custom"]))
+print(is_conventional("custom: DTCT-99: this is a conventional commit", types=["custom"]))
+
+# prints True
+print(is_conventional("feat: this is a conventional commit", optional_ticket=True))
+
+# prints False
+print(is_conventional("feat: DTCT-99 this is not a conventional commit", optional_colon_after_ticket=False))
 ```
 
 ## Passing `args`
@@ -147,12 +155,12 @@ Supply arguments on the command-line, or via the pre-commit `hooks.args` propert
 
 ```yaml
 repos:
-  - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: <git sha or tag>
-    hooks:
-      - id: conventional-pre-commit
-        stages: [commit-msg]
-        args: [--strict, --force-scope, feat, fix, chore, test, custom]
+    - repo: https://github.com/compilerla/conventional-pre-commit
+      rev: <git sha or tag>
+      hooks:
+          - id: conventional-pre-commit
+            stages: [commit-msg]
+            args: [--strict, --force-scope, feat, fix, chore, test, custom]
 ```
 
 **NOTE:** when using as a pre-commit hook, `input` is supplied automatically (with the current commit's message).

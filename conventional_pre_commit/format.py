@@ -41,7 +41,21 @@ def r_delim():
 
 def r_subject():
     """Regex str for subject line."""
-    return r" .+$"
+    return r"\s+.+$"
+
+
+def r_ticket(optional_ticket=False, optional_colon_after_ticket=True):
+    """Regex str for a Jira ticket number with optional colon"""
+    if optional_ticket:
+        if optional_colon_after_ticket:
+            return r"(\s+([A-Z]+-[0-9]+:?))?"
+        else:
+            return r"(\s+([A-Z]+-[0-9]+:))?"
+    else:
+        if optional_colon_after_ticket:
+            return r"\s+([A-Z]+-[0-9]+:?)"
+        else:
+            return r"\s+([A-Z]+-[0-9]+:)"
 
 
 def r_body():
@@ -61,15 +75,15 @@ def conventional_types(types=[]):
     return types
 
 
-def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True):
+def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True, optional_ticket=False, optional_colon_after_ticket=True):
     """
-    Returns True if input matches Conventional Commits formatting
+    Returns True if input matches AO Conventional Commits formatting
     https://www.conventionalcommits.org
 
     Optionally provide a list of additional custom types.
     """
     types = conventional_types(types)
-    pattern = f"^({r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_subject()}{r_body()}"
+    pattern = f"^({r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_ticket(optional_ticket, optional_colon_after_ticket)}{r_subject()}{r_body()}"  # noqa: E501
     regex = re.compile(pattern, re.MULTILINE)
 
     result = regex.match(input)

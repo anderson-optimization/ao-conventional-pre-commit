@@ -77,6 +77,16 @@ def test_r_delim__optional_breaking_indicator():
     assert regex.match("!:")
 
 
+def test_r_ticket():
+    result = format.r_ticket()
+    regex = re.compile(result)
+
+    assert not regex.match("DTCT-99:")
+    assert not regex.match("DTCT-99")
+    assert regex.match(" DTCT-99")
+    assert regex.match(" DTCT-99:")
+
+
 def test_r_subject__starts_with_space():
     result = format.r_subject()
     regex = re.compile(result)
@@ -124,46 +134,46 @@ def test_conventional_types__custom():
 
 @pytest.mark.parametrize("type", format.DEFAULT_TYPES)
 def test_is_conventional__default_type(type):
-    input = f"{type}: message"
+    input = f"{type}: DTCT-99: message"
 
     assert format.is_conventional(input)
 
 
 @pytest.mark.parametrize("type", format.CONVENTIONAL_TYPES)
 def test_is_conventional__conventional_type(type):
-    input = f"{type}: message"
+    input = f"{type}: DTCT-99: message"
 
     assert format.is_conventional(input)
 
 
 @pytest.mark.parametrize("type", CUSTOM_TYPES)
 def test_is_conventional__custom_type(type):
-    input = f"{type}: message"
+    input = f"{type}: DTCT-99: message"
 
     assert format.is_conventional(input, CUSTOM_TYPES)
 
 
 @pytest.mark.parametrize("type", format.CONVENTIONAL_TYPES)
 def test_is_conventional__conventional_custom_type(type):
-    input = f"{type}: message"
+    input = f"{type}: DTCT-99: message"
 
     assert format.is_conventional(input, CUSTOM_TYPES)
 
 
 def test_is_conventional__breaking_change():
-    input = "fix!: message"
+    input = "fix!: DTCT-99: message"
 
     assert format.is_conventional(input)
 
 
 def test_is_conventional__with_scope():
-    input = "feat(scope): message"
+    input = "feat(scope): DTCT-99: message"
 
     assert format.is_conventional(input)
 
 
 def test_is_conventional__body_multiline_body_bad_type():
-    input = """wrong: message
+    input = """wrong: DTCT-99: message
 
     more_message
     """
@@ -172,7 +182,7 @@ def test_is_conventional__body_multiline_body_bad_type():
 
 
 def test_is_conventional__bad_body_multiline():
-    input = """feat(scope): message
+    input = """feat(scope): DTCT-99: message
     more message
     """
 
@@ -180,7 +190,7 @@ def test_is_conventional__bad_body_multiline():
 
 
 def test_is_conventional__body_multiline():
-    input = """feat(scope): message
+    input = """feat(scope): DTCT-99: message
 
     more message
     """
@@ -189,7 +199,7 @@ def test_is_conventional__body_multiline():
 
 
 def test_is_conventional__bad_body_multiline_paragraphs():
-    input = """feat(scope): message
+    input = """feat(scope): DTCT-99: message
     more message
 
     more body message
@@ -200,51 +210,81 @@ def test_is_conventional__bad_body_multiline_paragraphs():
 
 @pytest.mark.parametrize("char", ['"', "'", "`", "#", "&"])
 def test_is_conventional__body_special_char(char):
-    input = f"feat: message with {char}"
+    input = f"feat: DTCT-99: message with {char}"
 
     assert format.is_conventional(input)
 
 
 def test_is_conventional__wrong_type():
-    input = "wrong: message"
+    input = "wrong: DTCT-99: message"
 
     assert not format.is_conventional(input)
 
 
 def test_is_conventional__scope_special_chars():
-    input = "feat(%&*@()): message"
+    input = "feat(%&*@()): DTCT-99: message"
 
     assert not format.is_conventional(input)
 
 
 def test_is_conventional__space_scope():
-    input = "feat (scope): message"
+    input = "feat (scope): DTCT-99: message"
 
     assert not format.is_conventional(input)
 
 
 def test_is_conventional__scope_space():
-    input = "feat(scope) : message"
+    input = "feat(scope) : DTCT-99: message"
+
+    assert not format.is_conventional(input)
+
+
+def test_is_conventional__no_ticket_space():
+    input = "feat(scope):DTCT-99: message"
 
     assert not format.is_conventional(input)
 
 
 def test_is_conventional__scope_not_optional():
-    input = "feat: message"
+    input = "feat: DTCT-99: message"
 
     assert not format.is_conventional(input, optional_scope=False)
 
 
 def test_is_conventional__scope_not_optional_empty_parenthesis():
-    input = "feat(): message"
+    input = "feat(): DTCT-99: message"
 
     assert not format.is_conventional(input, optional_scope=False)
 
 
 def test_is_conventional__missing_delimiter():
-    input = "feat message"
+    input = "feat DTCT-99: message"
 
     assert not format.is_conventional(input)
+
+
+def test_is_conventional__missing_ticket():
+    input = "feat: message"
+
+    assert not format.is_conventional(input)
+
+
+def test_is_conventional__optional_ticket():
+    input = "feat: message"
+
+    assert format.is_conventional(input, optional_ticket=True)
+
+
+def test_is_conventional__missing_colon():
+    input = "feat: DTCT-99 message"
+
+    assert format.is_conventional(input)
+
+
+def test_is_conventional__missing_colon_not_optional_colon():
+    input = "feat: DTCT-99 message"
+
+    assert not format.is_conventional(input, optional_colon_after_ticket=False)
 
 
 @pytest.mark.parametrize(
