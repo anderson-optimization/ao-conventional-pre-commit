@@ -1,9 +1,11 @@
-# conventional-pre-commit
+# ao-conventional-pre-commit
 
 A [`pre-commit`](https://pre-commit.com) hook to check commit messages for
 [Conventional Commits](https://conventionalcommits.org) formatting, customized for Anderson Optimization format to include JIRA ticket numbers.
 
 [See the GitBook for more details](https://app.gitbook.com/o/-MPk29w3J35c1gpH27R3/s/-MTfg11Sa9v8-geD90cu/process/overview-2#4.-commit-messages).
+
+Forked from [compilerla/conventional-pre-commit](https://github.com/compilerla/conventional-pre-commit)
 
 Works with Python >= 3.8.
 
@@ -23,10 +25,10 @@ Add a new repo entry to your configuration file:
 repos:
     # - repo: ...
 
-    - repo: https://github.com/compilerla/conventional-pre-commit
+    - repo: https://github.com/anderson-optimization/ao-conventional-pre-commit
       rev: <git sha or tag>
       hooks:
-          - id: conventional-pre-commit
+          - id: ao-conventional-pre-commit
             stages: [commit-msg]
             args: []
 ```
@@ -43,8 +45,8 @@ Make a (normal) commit :x::
 $ git commit -m "add a new feature"
 
 [INFO] Initializing environment for ....
-Conventional Commit......................................................Failed
-- hook id: conventional-pre-commit
+AO Conventional Commit......................................................Failed
+- hook id: ao-conventional-pre-commit
 - duration: 0.07s
 - exit code: 1
 
@@ -53,26 +55,26 @@ Conventional Commit......................................................Failed
 Your commit message does not follow Conventional Commits formatting
 https://www.conventionalcommits.org/
 
-Conventional Commits start with one of the below types, followed by a colon,
-followed by the commit message:
+AO Conventional Commits start with one of the below types, followed by a colon,
+followed by a ticket number and colon, followed by the commit message:
 
     build chore ci docs feat fix perf refactor revert style test
 
 Example commit message adding a feature:
 
-    feat: implement new API
+    feat: SVCOR-12: implement new API
 
 Example commit message fixing an issue:
 
-    fix: remove infinite loop
+    fix: DTCT-99: remove infinite loop
 
 Example commit with scope in parentheses after the type for more context:
 
-    fix(account): remove infinite loop
+    fix(account): PROSP-55: remove infinite loop
 
 Example commit with a body:
 
-    fix: remove infinite loop
+    fix: DATLA-42: remove infinite loop
 
     Additional information on the issue caused by the infinite loop
 ```
@@ -80,26 +82,26 @@ Example commit with a body:
 Make a (conventional) commit :heavy_check_mark::
 
 ```console
-$ git commit -m "feat: add a new feature"
+$ git commit -m "feat: DTCT-33 add a new feature"
 
 [INFO] Initializing environment for ....
-Conventional Commit......................................................Passed
-- hook id: conventional-pre-commit
+AO Conventional Commit......................................................Passed
+- hook id: ao-conventional-pre-commit
 - duration: 0.05s
 ```
 
 ## Install with pip
 
-`conventional-pre-commit` can also be installed and used from the command line:
+`ao-conventional-pre-commit` can also be installed and used from the command line:
 
 ```shell
-pip install conventional-pre-commit
+pip install ao-conventional-pre-commit
 ```
 
 Then run the command line script:
 
 ```shell
-conventional-pre-commit [types] input
+ao-conventional-pre-commit [types] input
 ```
 
 -   `[types]` is an optional list of Conventional Commit types to allow (e.g. `feat fix chore`)
@@ -107,7 +109,7 @@ conventional-pre-commit [types] input
 -   `input` is a file containing the commit message to check:
 
 ```shell
-conventional-pre-commit feat fix chore ci test .git/COMMIT_MSG
+ao-conventional-pre-commit feat fix chore ci test .git/COMMIT_MSG
 ```
 
 Or from a Python program:
@@ -133,11 +135,11 @@ print(is_conventional("feat: DTCT-99 this is not a conventional commit", optiona
 
 ## Passing `args`
 
-`conventional-pre-commit` supports a number of arguments to configure behavior:
+`ao-conventional-pre-commit` supports a number of arguments to configure behavior:
 
 ```shell
-$ conventional-pre-commit -h
-usage: conventional-pre-commit [-h] [--force-scope] [--strict] [types ...] input
+$ ao-conventional-pre-commit -h
+usage: ao-conventional-pre-commit [-h] [--force-scope] [--strict] [types ...] input
 
 Check a git commit message for Conventional Commits formatting.
 
@@ -149,16 +151,19 @@ options:
   -h, --help     show this help message and exit
   --force-scope  Force commit to have scope defined.
   --strict       Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.
+  --optional-ticket     Allow for optional ticket number. This enables default conventional commit style.
+  --force-colon-after-ticket
+                        Force commit to contain a colon after ticket number.
 ```
 
 Supply arguments on the command-line, or via the pre-commit `hooks.args` property:
 
 ```yaml
 repos:
-    - repo: https://github.com/compilerla/conventional-pre-commit
+    - repo: https://github.com/anderson-optimization/ao-conventional-pre-commit
       rev: <git sha or tag>
       hooks:
-          - id: conventional-pre-commit
+          - id: ao-conventional-pre-commit
             stages: [commit-msg]
             args: [--strict, --force-scope, feat, fix, chore, test, custom]
 ```
@@ -167,7 +172,7 @@ repos:
 
 ## Development
 
-`conventional-pre-commit` comes with a [VS Code devcontainer](https://code.visualstudio.com/learn/develop-cloud/containers)
+`ao-conventional-pre-commit` comes with a [VS Code devcontainer](https://code.visualstudio.com/learn/develop-cloud/containers)
 configuration to provide a consistent development environment.
 
 With the `Remote - Containers` extension enabled, open the folder containing this repository inside Visual Studio Code.
